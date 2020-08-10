@@ -53,7 +53,7 @@ describe('workout-list routes', () => {
       
   });
 
-  it('get all workouts', async() => {
+  it('updates a workout', async() => {
     const workout1 = await Workout.create({
       name: 'Bench Press',
       muscles: 'Chest, Triceps',
@@ -86,12 +86,28 @@ describe('workout-list routes', () => {
       });
       
   });
+
+  it('can delete a workout', async() => {
+    const workout = await Workout.create({
+      name: 'Bench Press',
+      muscles: 'Chest, Triceps',
+      description: 'Raise the bar up, and lower it in a controlled motion onto your chest. Once it touches, push (with an emphasis on using your chest and triceps). For an added challenge: pause when the bar touches your chest.',
+      reps: 25,
+      weight: 135
+    });
+  
+    return agent
+      .delete(`/api/v1/workouts/${workout._id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: workout.id,
+          name: 'Bench Press',
+          muscles: 'Chest, Triceps',
+          description: 'Raise the bar up, and lower it in a controlled motion onto your chest. Once it touches, push (with an emphasis on using your chest and triceps). For an added challenge: pause when the bar touches your chest.',
+          reps: 25,
+          weight: 135,
+          __v: 0
+        });
+      });
+  });
 });
-
-// it('can update a workout', () => {
-    
-
-// });
-// it('can delete a workout', () => {
-    
-// });
