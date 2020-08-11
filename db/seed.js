@@ -2,7 +2,7 @@ const chance = require('chance').Chance();
 const Workout = require('../lib/models/Workout');
 
 module.exports = async({ workouts = 10  } = {}) => {
-  const workoutArray = await Promise.all([...Array(workouts)].map(async() => {
+  await Promise.all([...Array(workouts)].map(async() => {
     return Workout.create({
       name: chance.word(),
       muscles: chance.word(),
@@ -11,3 +11,4 @@ module.exports = async({ workouts = 10  } = {}) => {
       weight: chance.natural({ min: 1, max: 400 })
     });
   }));
+};
