@@ -5,6 +5,8 @@ const connect = require('../lib/utils/connect');
 const request = require('supertest');
 const app = require('../lib/app');
 
+const User = require('../lib/models/User');
+
 describe('auth-list routes', () => {
   beforeAll(async() => {
     const uri = await mongod.getUri();
@@ -35,6 +37,29 @@ describe('auth-list routes', () => {
           _id: expect.any(String),
           email: newUser.email,
           profileImage: newUser.profileImage
+        });
+      });
+    
+  });
+
+  it('can log a user in', async() => {
+    await User.create({
+      email: 'test@test.com',
+      password: 'password',
+      profileImage: 'placeholder.com'
+    });
+
+    return request(app)
+      .post('/api/v1/auth/login')
+      .send({ 
+        email: 'test@test.com', 
+        password: 'password' 
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          email: 'test@test.com',
+          profileImage: 'placeholder.com'
         });
       });
     
