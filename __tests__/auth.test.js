@@ -1,4 +1,3 @@
-const Workout = require('../lib/models/Workout');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongod = new MongoMemoryServer();
 const mongoose = require('mongoose');
@@ -21,7 +20,7 @@ describe('auth-list routes', () => {
     return mongod.stop();
   });
   
-  it('can create a new workout', () => {
+  it('can create a new user', () => {
     const newUser = {
       email: 'test@test.com',
       password: 'password',
@@ -29,10 +28,11 @@ describe('auth-list routes', () => {
     };
 
     return request(app)
-      .post('/signup')
+      .post('/api/v1/auth/signup')
       .send(newUser)
       .then(res => {
         expect(res.body).toEqual({
+          _id: expect.any(String),
           email: newUser.email,
           profileImage: newUser.profileImage
         });
