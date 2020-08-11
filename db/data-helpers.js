@@ -17,6 +17,10 @@ beforeEach(() => {
   return mongoose.connection.dropDatabase();
 });
 
+beforeEach(() => {
+  return seed();
+});
+
 afterAll(async() => {
   await mongoose.connection.close();
   return mongod.stop();
