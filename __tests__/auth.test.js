@@ -64,4 +64,18 @@ describe('auth-list routes', () => {
       });
     
   });
+
+  it('verifies a user', () => {
+    const agent = request.agent(app);
+    return agent
+      .post('api/v1/auth/signup')
+      .send({ email: 'test@test.com', password: 'password' })
+      .then(() => agent.get('/api/v1/auth/verify'))
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          email: 'test@test'.com
+        });
+      });
+  });
 });
