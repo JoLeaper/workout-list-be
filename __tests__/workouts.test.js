@@ -1,9 +1,10 @@
-const { agent } = require('../db/data-helpers');
 const Workout = require('../lib/models/Workout');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongod = new MongoMemoryServer();
 const mongoose = require('mongoose');
 const connect = require('../lib/utils/connect');
+const request = require('supertest');
+const app = require('../lib/app');
 
 describe('workout-list routes', () => {
   beforeAll(async() => {
@@ -29,7 +30,7 @@ describe('workout-list routes', () => {
       weight: 135
     };
 
-    return agent
+    return request(app)
       .post('/api/v1/workouts')
       .send(newWorkout)
       .then(res => {
@@ -63,7 +64,7 @@ describe('workout-list routes', () => {
       weight: 225
     });
   
-    return agent
+    return request(app)
       .get('/api/v1/workouts')
       .then(res => {
         expect(res.body).toHaveLength(2);
@@ -88,7 +89,7 @@ describe('workout-list routes', () => {
       weight: 155
     };
 
-    return agent
+    return request(app)
       .patch(`/api/v1/workouts/${workout1._id}`)
       .send(updatedworkout1)
       .then(res => {
@@ -114,7 +115,7 @@ describe('workout-list routes', () => {
       weight: 135
     });
   
-    return agent
+    return request(app)
       .delete(`/api/v1/workouts/${workout._id}`)
       .then(res => {
         expect(res.body).toEqual({
