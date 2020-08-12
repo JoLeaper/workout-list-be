@@ -8,8 +8,6 @@ const request = require('supertest');
 const app = require('../lib/app');
 const User = require('../lib/models/User');
 
-
-
 describe('auth routes', () => {
   beforeAll(async() => {
     const uri = await mongod.getUri();
