@@ -1,13 +1,16 @@
+require('dotenv').config();
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongod = new MongoMemoryServer();
 const mongoose = require('mongoose');
 const connect = require('../lib/utils/connect');
+
 const request = require('supertest');
 const app = require('../lib/app');
-
 const User = require('../lib/models/User');
 
-describe('auth-list routes', () => {
+
+
+describe('auth routes', () => {
   beforeAll(async() => {
     const uri = await mongod.getUri();
     return connect(uri);
@@ -21,6 +24,7 @@ describe('auth-list routes', () => {
     await mongoose.connection.close();
     return mongod.stop();
   });
+
   
   it('can create a new user', () => {
     const newUser = {
@@ -68,13 +72,13 @@ describe('auth-list routes', () => {
   it('verifies a user', () => {
     const agent = request.agent(app);
     return agent
-      .post('api/v1/auth/signup')
+      .post('/api/v1/auth/signup')
       .send({ email: 'test@test.com', password: 'password' })
       .then(() => agent.get('/api/v1/auth/verify'))
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
-          email: 'test@test'.com
+          email: 'test@test.com'
         });
       });
   });
